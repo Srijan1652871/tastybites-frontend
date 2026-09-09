@@ -1,12 +1,14 @@
 import { LogOut } from "lucide-react";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const handleLogout = () => {
     Cookies.remove("token");
     Cookies.remove("role");
     Cookies.remove("userDetails");
-    window.location.href = "/admin-signup";
+    navigate("/admin-signup")
   };
 
   return (
