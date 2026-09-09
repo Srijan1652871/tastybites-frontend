@@ -5,7 +5,7 @@ const Home = () => {
     <div className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 space-y-10">
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold text-gray-900">
-          Good food, made simple
+          Good food, Made simple
         </h1>
         <p className="text-gray-500 max-w-md mx-auto">
           Browse our menu and find something you'll love.
