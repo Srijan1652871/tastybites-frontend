@@ -4,7 +4,7 @@ import { Outlet } from "react-router-dom";
 
 const UserWrapper = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-orange-50/40">
+    <div className="min-h-screen flex flex-col bg-violet-50/40">
       <Header />
       <div className="flex-1">
         <Outlet />

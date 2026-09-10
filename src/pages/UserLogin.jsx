@@ -48,7 +48,10 @@ const UserLogin = () => {
       setisError("");
       setisLoading(true);
       try {
-        const response = await axios.post(`${import.meta.env.VITE_SERVER_URL}/auth/login`, formdata);
+        const response = await axios.post(
+          `${import.meta.env.VITE_SERVER_URL}/auth/login`,
+          formdata
+        );
         if (response.data.success) {
           toast.success(response.data.message);
           Cookies.set("token", response.data.token);
@@ -75,7 +78,7 @@ const UserLogin = () => {
     <div className="min-h-[80vh] flex justify-center items-center px-6">
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-gray-200 rounded-lg p-6 w-96 space-y-4"
+        className="bg-white border border-gray-200 rounded-lg p-6 w-96 space-y-3 shadow-sm"
       >
         <h1 className="text-xl font-semibold text-center text-gray-900">
           Log in to TastyBites
@@ -89,9 +92,11 @@ const UserLogin = () => {
             name="email"
             placeholder="name@example.com"
             value={formdata.email}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-500"
           />
-          {error.email && <p className="text-red-500 text-xs mt-1">{error.email}</p>}
+          {error.email && (
+            <p className="text-red-500 text-xs mt-1">{error.email}</p>
+          )}
         </div>
 
         <div className="space-y-1">
@@ -102,9 +107,11 @@ const UserLogin = () => {
             name="password"
             placeholder="••••••••"
             value={formdata.password}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-400"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-violet-200 focus:border-violet-500"
           />
-          {error.password && <p className="text-red-500 text-xs mt-1">{error.password}</p>}
+          {error.password && (
+            <p className="text-red-500 text-xs mt-1">{error.password}</p>
+          )}
         </div>
 
         {isError && <p className="text-sm text-red-600">{isError}</p>}
@@ -112,16 +119,20 @@ const UserLogin = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full py-2 rounded-md bg-orange-500 text-white text-sm font-medium hover:bg-orange-600 flex items-center justify-center"
+          className="w-full py-2 rounded-md bg-violet-600 text-white text-sm font-medium hover:bg-violet-700 transition-colors flex items-center justify-center"
         >
-          {isLoading ? <Loader2 className="animate-spin" size={18} /> : "Log in"}
+          {isLoading ? (
+            <Loader2 className="animate-spin" size={18} />
+          ) : (
+            "Log in"
+          )}
         </button>
 
         <p className="text-center text-sm text-gray-500">
           Don't have an account?{" "}
           <span
             onClick={() => navigate("/register")}
-            className="text-orange-500 cursor-pointer hover:underline"
+            className="text-violet-600 cursor-pointer hover:underline"
           >
             Register
           </span>

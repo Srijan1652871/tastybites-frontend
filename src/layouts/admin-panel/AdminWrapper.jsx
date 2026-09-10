@@ -8,7 +8,7 @@ const AdminWrapper = () => {
       <Navbar />
       <div className="flex flex-1">
         <Sidebar />
-        <div className="flex-1 p-6 bg-orange-50/40">
+        <div className="flex-1 p-5 bg-violet-50/40">
           <Outlet />
         </div>
       </div>
