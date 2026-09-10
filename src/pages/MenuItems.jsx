@@ -6,6 +6,7 @@ import MenuItemCard from "../components/MenuItemCard";
 
 const MenuItems = () => {
   const [menuItems, setMenuItems] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
   const [isLoading, setIsLoading] = useState(true);
   const token = Cookies.get("token");
 
@@ -33,6 +34,13 @@ const MenuItems = () => {
     fetchMenuItems();
   }, [token]);
 
+  const categories = ["All", "Starter", "Main Course", "Dessert", "Beverage"];
+
+  const filteredItems =
+    selectedCategory === "All"
+      ? menuItems
+      : menuItems.filter((item) => item.category === selectedCategory);
+
   return (
     <div className="max-w-5xl mx-auto px-6 py-6 space-y-5">
       <div className="text-center space-y-2">
@@ -45,6 +53,22 @@ const MenuItems = () => {
             Login to browse more
           </p>
         )}
+      </div>
+
+      <div className="flex flex-wrap justify-center gap-2">
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-4 py-2 rounded-md border text-sm font-medium transition-colors ${
+              selectedCategory === category
+                ? "bg-violet-600 border-violet-600 text-white"
+                : "bg-white border-gray-200 text-gray-600 hover:border-violet-300 hover:text-violet-600"
+            }`}
+          >
+            {category}
+          </button>
+        ))}
       </div>
 
       {isLoading ? (
@@ -62,7 +86,7 @@ const MenuItems = () => {
             </div>
           ))}
         </div>
-      ) : menuItems.length === 0 ? (
+      ) : filteredItems.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-10 text-center">
           <UtensilsCrossed
             size={32}
@@ -70,12 +94,12 @@ const MenuItems = () => {
             className="text-violet-400 mb-3"
           />
           <p className="text-sm text-gray-500">
-            No menu items available right now.
+            No menu items available in this category.
           </p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {menuItems.map((item) => (
+          {filteredItems.map((item) => (
             <MenuItemCard key={item._id} item={item} />
           ))}
         </div>

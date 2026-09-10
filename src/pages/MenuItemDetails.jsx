@@ -60,12 +60,12 @@ const MenuItemDetails = () => {
               {item.name}
             </h1>
 
-            <span className="text-lg font-semibold text-amber-600 whitespace-nowrap">
+            <span className="text-lg font-semibold text-violet-600 whitespace-nowrap">
               ₹{item.price}
             </span>
           </div>
 
-          <span className="inline-block text-xs text-amber-600 border border-amber-300 rounded-full px-3 py-1">
+          <span className="inline-block text-xs text-violet-600 border border-violet-300 rounded-full px-3 py-1">
             {item.category}
           </span>
 

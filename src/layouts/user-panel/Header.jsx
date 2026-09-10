@@ -16,7 +16,7 @@ const Header = () => {
     <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <nav className="max-w-5xl mx-auto px-6 py-3 flex items-center justify-between">
         <NavLink to="/" className="text-lg font-semibold text-gray-900">
-          <span className="text-amber-600">TASTY BITES</span>
+          <span className="text-violet-600">TASTY BITES</span>
         </NavLink>
 
         <div className="flex items-center gap-6 text-sm">

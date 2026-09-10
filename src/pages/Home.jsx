@@ -132,7 +132,7 @@ const Home = () => {
           <div className="bg-white border border-gray-200 rounded-lg p-5 text-center">
             <Sparkles
               size={22}
-              className="mx-auto text-amber-600 mb-3"
+              className="mx-auto text-violet-600 mb-3"
             />
             <h3 className="text-sm font-medium text-gray-900">
               Fresh menu, always up to date

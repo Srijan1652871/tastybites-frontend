@@ -23,7 +23,7 @@ const MenuItemCard = ({ item }) => {
       <div className="p-4 flex flex-col gap-2 flex-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-medium text-gray-900">{item.name}</h3>
-          <span className="text-sm font-semibold text-amber-600 whitespace-nowrap">
+          <span className="text-sm font-semibold text-violet-600 whitespace-nowrap">
             ₹{item.price}
           </span>
         </div>
