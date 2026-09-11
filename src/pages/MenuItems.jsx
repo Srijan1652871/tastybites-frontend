@@ -17,13 +17,8 @@ const MenuItems = () => {
           `${import.meta.env.VITE_SERVER_URL}/menu-items`
         );
         const allItems = response?.data?.data || [];
-
-        if (token) {
-          setMenuItems(allItems);
-        } else {
-          const shuffled = [...allItems].sort(() => 0.5 - Math.random());
-          setMenuItems(shuffled.slice(0, 3));
-        }
+        setMenuItems(allItems);
+        
       } catch (error) {
         console.log("error", error.message);
       } finally {
