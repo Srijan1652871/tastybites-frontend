@@ -134,53 +134,69 @@ const About = () => (
     {/* Our Journey / Timeline */}
     <section className="py-20 bg-[#1a1a2e]">
       <div className="max-w-4xl mx-auto px-5 sm:px-8">
+
         <FadeInUp className="text-center mb-14">
-          <p className="section-label justify-center text-amber-400"><Award size={13} /> Our Journey</p>
-          <h2 className="section-title-light">Six Years of <span className="text-amber-400 italic">Excellence</span></h2>
+          <p className="section-label justify-center text-amber-400">
+            <Award size={13} /> Our Journey
+          </p>
+
+          <h2 className="section-title-light">
+            Six Years of{" "}
+            <span className="text-amber-400 italic">Excellence</span>
+          </h2>
         </FadeInUp>
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-4 sm:left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
-          <div className="space-y-10">
-            {milestones.map((m, i) => (
-              <FadeInUp key={i} delay={i * 80}>
-                <div className={`relative flex items-start gap-6 ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"}`}>
-                  <div className="sm:flex-1 sm:text-right hidden sm:block">
-                    {i % 2 !== 0 && (
-                      <div>
-                        <span className="inline-block text-amber-400 font-bold text-xl font-serif">{m.year}</span>
-                        <h3 className="text-white font-semibold mt-1">{m.title}</h3>
-                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">{m.desc}</p>
-                      </div>
-                    )}
+
+        <div className="space-y-5">
+
+          {milestones.map((m, i) => (
+            <FadeInUp key={i} delay={i * 80}>
+
+              <div className="group relative bg-white/[0.04] border border-white/10 hover:border-amber-400/40 transition-all duration-300">
+
+                {/* Amber accent on the left */}
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-400" />
+
+                <div className="flex items-start gap-6 p-6 sm:p-7">
+
+                  {/* Year */}
+                  <div className="shrink-0 w-20 sm:w-24 text-center">
+                    <span className="text-amber-400 font-bold text-2xl sm:text-3xl font-serif">
+                      {m.year}
+                    </span>
+
+                    <div className="mt-2 mx-auto w-8 h-px bg-amber-400/40" />
                   </div>
-                  {/* Dot */}
-                  <div className="shrink-0 w-8 h-8 rounded-full bg-amber-400 flex items-center justify-center z-10 relative sm:absolute sm:left-1/2 sm:-translate-x-1/2 sm:top-0">
-                    <div className="w-3 h-3 rounded-full bg-[#1a1a2e]" />
+
+                  {/* Vertical divider */}
+                  <div className="hidden sm:block w-px self-stretch bg-white/10" />
+
+                  {/* Content */}
+                  <div className="flex-1">
+                    <h3 className="text-white font-semibold text-lg sm:text-xl">
+                      {m.title}
+                    </h3>
+
+                    <p className="text-gray-400 text-sm sm:text-base mt-2 leading-relaxed">
+                      {m.desc}
+                    </p>
                   </div>
-                  <div className="sm:flex-1">
-                    <div className="sm:hidden">
-                      <span className="text-amber-400 font-bold text-xl font-serif">{m.year}</span>
-                    </div>
-                    {i % 2 === 0 && (
-                      <div className="hidden sm:block">
-                        <span className="inline-block text-amber-400 font-bold text-xl font-serif">{m.year}</span>
-                        <h3 className="text-white font-semibold mt-1">{m.title}</h3>
-                        <p className="text-gray-400 text-sm mt-1 leading-relaxed">{m.desc}</p>
-                      </div>
-                    )}
-                    <div className="sm:hidden">
-                      <h3 className="text-white font-semibold mt-1">{m.title}</h3>
-                      <p className="text-gray-400 text-sm mt-1 leading-relaxed">{m.desc}</p>
-                    </div>
+
+                  {/* Number */}
+                  <div className="hidden sm:block text-white/10 font-serif text-4xl font-bold">
+                    {String(i + 1).padStart(2, "0")}
                   </div>
+
                 </div>
-              </FadeInUp>
-            ))}
-          </div>
+
+              </div>
+
+            </FadeInUp>
+          ))}
+
         </div>
       </div>
     </section>
+
 
     {/* Meet the Chefs */}
     <section className="py-20 bg-white">
