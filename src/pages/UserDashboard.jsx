@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
@@ -99,30 +99,34 @@ const OrderModal = ({ item, onClose, onSuccess }) => {
           </div>
         </div>
         <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-3">
-          <div>
-            <label className="form-label">Full Name *</label>
-            <input type="text" className="form-input" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Recipient name" />
-            {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-          </div>
-          <div>
-            <label className="form-label">Phone *</label>
-            <input type="text" className="form-input" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} placeholder="+91 98000 00000" />
-            {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="form-label">Full Name *</label>
+              <input type="text" className="form-input" value={form.name} onChange={(e) => setForm({...form, name: e.target.value})} placeholder="Recipient name" />
+              {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+            </div>
+            <div>
+              <label className="form-label">Phone *</label>
+              <input type="text" className="form-input" value={form.phone} onChange={(e) => setForm({...form, phone: e.target.value})} placeholder="+91 98000 00000" />
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+            </div>
           </div>
           <div>
             <label className="form-label">Delivery Address *</label>
-            <textarea rows={2} className="form-input resize-none" value={form.address} onChange={(e) => setForm({...form, address: e.target.value})} placeholder="House / Flat No., Street, Area" />
+            <input type="text" className="form-input" value={form.address} onChange={(e) => setForm({...form, address: e.target.value})} placeholder="House / Flat No., Street, Area" />
             {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
           </div>
-          <div>
-            <label className="form-label">City</label>
-            <input type="text" className="form-input" value={form.city} onChange={(e) => setForm({...form, city: e.target.value})} placeholder="Kolkata" />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="form-label">City</label>
+              <input type="text" className="form-input" value={form.city} onChange={(e) => setForm({...form, city: e.target.value})} placeholder="Kolkata" />
+            </div>
+            <div>
+              <label className="form-label">Additional Notes</label>
+              <input type="text" className="form-input" value={form.notes} onChange={(e) => setForm({...form, notes: e.target.value})} placeholder="Leave at door, etc." />
+            </div>
           </div>
-          <div>
-            <label className="form-label">Additional Notes</label>
-            <input type="text" className="form-input" value={form.notes} onChange={(e) => setForm({...form, notes: e.target.value})} placeholder="Leave at door, etc." />
-          </div>
-          <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-3 mt-2">
+          <button type="submit" disabled={loading} className="btn-primary w-full justify-center py-2.5 mt-2">
             {loading ? <><Loader2 size={17} className="animate-spin" /> Placing Order...</> : <><ShoppingBag size={17} /> Confirm Order</>}
           </button>
         </form>
