@@ -9,6 +9,8 @@ import {
   CalendarCheck,
   LogOut,
   X,
+  Package,
+  Home,
 } from "lucide-react";
 
 const Sidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
@@ -35,6 +37,7 @@ const Sidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       title: "Operations",
       links: [
         { to: "/admin/reservations", icon: <CalendarCheck size={18} />, label: "Reservations", end: false },
+        { to: "/admin/orders", icon: <Package size={18} />, label: "Orders", end: false },
         { to: "/admin/reviews", icon: <MessageSquareText size={18} />, label: "Guest Reviews", end: false },
       ]
     },
@@ -69,7 +72,7 @@ const Sidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
       {/* Nav Links */}
       <div className="flex-1 overflow-y-auto py-6 px-4 space-y-8 custom-scrollbar">
         {/* Dashboard Link */}
-        <div>
+        <div className="space-y-1">
           <NavLink
             to="/admin/dashboard"
             className={({ isActive }) =>
@@ -82,6 +85,13 @@ const Sidebar = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           >
             <LayoutDashboard size={18} />
             Dashboard
+          </NavLink>
+          <NavLink
+            to="/"
+            className="flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white transition-all"
+          >
+            <Home size={18} />
+            Back to Website
           </NavLink>
         </div>
 

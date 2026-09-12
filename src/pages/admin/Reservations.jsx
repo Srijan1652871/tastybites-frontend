@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
@@ -10,6 +10,7 @@ import {
   XCircle,
   Clock,
   Users,
+  Trash2,
 } from "lucide-react";
 
 const statusColors = {
@@ -23,6 +24,7 @@ const AdminReservations = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const token = Cookies.get("token");
 
@@ -61,6 +63,25 @@ const AdminReservations = () => {
       toast.error(error?.response?.data?.message || "Failed to update status");
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to permanently delete this reservation?")) return;
+    setDeletingId(id);
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/reservations/admin/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        setReservations((prev) => prev.filter((r) => r._id !== id));
+        toast.success("Reservation deleted successfully");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to delete reservation");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -207,6 +228,14 @@ const AdminReservations = () => {
                                 <XCircle size={16} />
                               </button>
                             )}
+                            <button
+                              onClick={() => handleDelete(res._id)}
+                              disabled={deletingId === res._id}
+                              className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors disabled:opacity-50"
+                              title="Delete"
+                            >
+                              {deletingId === res._id ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
+                            </button>
                           </>
                         )}
                       </div>

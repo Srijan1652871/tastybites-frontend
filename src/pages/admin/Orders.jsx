@@ -1,8 +1,8 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
 import Cookies from "js-cookie";
-import { Package, Search, Loader2, MapPin, Phone, ChevronDown } from "lucide-react";
+import { Package, Search, Loader2, MapPin, Phone, ChevronDown, Trash2 } from "lucide-react";
 
 const ALL_STATUSES = ["Pending", "Preparing", "Out for Delivery", "Delivered", "Cancelled"];
 
@@ -19,6 +19,7 @@ const AdminOrders = () => {
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
+  const [deletingId, setDeletingId] = useState(null);
 
   const token = Cookies.get("token");
 
@@ -55,6 +56,25 @@ const AdminOrders = () => {
       toast.error(error?.response?.data?.message || "Failed to update status");
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to permanently delete this order?")) return;
+    setDeletingId(id);
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_SERVER_URL}/orders/admin/${id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      if (response.data.success) {
+        setOrders((prev) => prev.filter((o) => o._id !== id));
+        toast.success("Order deleted successfully");
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to delete order");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -152,7 +172,17 @@ const AdminOrders = () => {
                           Qty: {order.item?.quantity} · <span className="text-amber-600 font-semibold">₹{order.totalAmount}</span>
                         </p>
                       </div>
-                      <span className={statusColors[order.status] || "badge-amber"}>{order.status}</span>
+                      <div className="flex items-center gap-3">
+                        <span className={statusColors[order.status] || "badge-amber"}>{order.status}</span>
+                        <button
+                          onClick={() => handleDelete(order._id)}
+                          disabled={deletingId === order._id}
+                          className="w-8 h-8 rounded-lg bg-red-50 text-red-500 hover:bg-red-100 flex items-center justify-center transition-colors disabled:opacity-50"
+                          title="Delete Order"
+                        >
+                          {deletingId === order._id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                        </button>
+                      </div>
                     </div>
 
                     <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1">
