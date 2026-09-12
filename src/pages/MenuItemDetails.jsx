@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, NavLink } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 import {
   ChevronRight,
   Star,
@@ -10,6 +11,7 @@ import {
   ShoppingBag,
   ArrowLeft,
   Heart,
+  Loader2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -18,6 +20,11 @@ const MenuItemDetails = () => {
   const navigate = useNavigate();
   const [item, setItem] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [cartLoading, setCartLoading] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+  const [inWishlist, setInWishlist] = useState(false);
+
+  const token = Cookies.get("token");
 
   useEffect(() => {
     const fetchMenuItem = async () => {
@@ -26,6 +33,16 @@ const MenuItemDetails = () => {
           `${import.meta.env.VITE_SERVER_URL}/menu-items/${id}`
         );
         setItem(response?.data?.data || null);
+
+        // Check if item is in wishlist
+        if (token) {
+          const userRes = await axios.get(
+            `${import.meta.env.VITE_SERVER_URL}/users/me`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          const wishlist = userRes?.data?.data?.wishlist || [];
+          setInWishlist(wishlist.some((w) => w._id === id));
+        }
       } catch (error) {
         console.log("error", error.message);
       } finally {
@@ -33,7 +50,50 @@ const MenuItemDetails = () => {
       }
     };
     fetchMenuItem();
-  }, [id]);
+  }, [id, token]);
+
+  const handleAddToCart = async () => {
+    if (!token) {
+      toast.error("Please log in to add items to your cart.");
+      navigate("/login");
+      return;
+    }
+    setCartLoading(true);
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/users/cart`,
+        { menuItemId: id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success(`${item.name} added to cart!`);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to add to cart.");
+    } finally {
+      setCartLoading(false);
+    }
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!token) {
+      toast.error("Please log in to save items to your wishlist.");
+      navigate("/login");
+      return;
+    }
+    setWishlistLoading(true);
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/users/wishlist/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setInWishlist(response.data.inWishlist);
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to update wishlist.");
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -63,6 +123,12 @@ const MenuItemDetails = () => {
       </div>
     );
   }
+
+  const quickInfo = [
+    { icon: <Flame size={18} />, label: item.calories || "N/A", sub: "Calories", color: "text-orange-500 bg-orange-50" },
+    { icon: <Clock size={18} />, label: item.prepTime || "N/A", sub: "Prep Time", color: "text-blue-500 bg-blue-50" },
+    { icon: <Users size={18} />, label: item.servings || "N/A", sub: "Servings", color: "text-emerald-500 bg-emerald-50" },
+  ];
 
   return (
     <div className="bg-[#fefce8] min-h-screen">
@@ -140,9 +206,7 @@ const MenuItemDetails = () => {
                       In Stock
                     </span>
                   ) : (
-                    <span className="badge-red">
-                      Out of Stock
-                    </span>
+                    <span className="badge-red">Out of Stock</span>
                   )}
                 </div>
 
@@ -154,33 +218,39 @@ const MenuItemDetails = () => {
                 {/* Actions */}
                 <div className="flex gap-3">
                   <button
-                    className="flex-1 btn-primary justify-center py-3"
-                    onClick={() => toast.success("Feature coming soon!")}
+                    className="flex-1 btn-primary justify-center py-3 disabled:opacity-60"
+                    onClick={handleAddToCart}
+                    disabled={cartLoading || !item.availability}
                   >
-                    <ShoppingBag size={17} />
-                    Add to Order
+                    {cartLoading ? <Loader2 size={17} className="animate-spin" /> : <ShoppingBag size={17} />}
+                    {item.availability ? "Add to Cart" : "Out of Stock"}
                   </button>
                   <button
-                    className="p-3 rounded-full border-2 border-gray-100 text-gray-400 hover:border-rose-400 hover:text-rose-400 transition-all"
-                    onClick={() => toast.success("Added to wishlist!")}
+                    className={`p-3 rounded-full border-2 transition-all ${
+                      inWishlist
+                        ? "border-rose-400 text-rose-400 bg-rose-50"
+                        : "border-gray-100 text-gray-400 hover:border-rose-400 hover:text-rose-400"
+                    }`}
+                    onClick={handleToggleWishlist}
+                    disabled={wishlistLoading}
                     aria-label="Wishlist"
                   >
-                    <Heart size={20} />
+                    {wishlistLoading ? (
+                      <Loader2 size={20} className="animate-spin" />
+                    ) : (
+                      <Heart size={20} className={inWishlist ? "fill-rose-400" : ""} />
+                    )}
                   </button>
                 </div>
               </div>
 
               {/* Right: Details */}
               <div className="space-y-5">
-                {/* Nutritional info placeholders */}
+                {/* Quick Info from DB */}
                 <div className="bg-[#fefce8] rounded-2xl p-5">
                   <h3 className="font-semibold text-[#1a1a2e] mb-4">Quick Info</h3>
                   <div className="grid grid-cols-3 gap-3">
-                    {[
-                      { icon: <Flame size={18} />, label: "~380 kcal", sub: "Calories", color: "text-orange-500 bg-orange-50" },
-                      { icon: <Clock size={18} />, label: "25 min", sub: "Prep Time", color: "text-blue-500 bg-blue-50" },
-                      { icon: <Users size={18} />, label: "1–2", sub: "Servings", color: "text-emerald-500 bg-emerald-50" },
-                    ].map((info, i) => (
+                    {quickInfo.map((info, i) => (
                       <div key={i} className="flex flex-col items-center text-center gap-2 p-3 bg-white rounded-xl">
                         <div className={`w-9 h-9 rounded-lg ${info.color} flex items-center justify-center`}>
                           {info.icon}
@@ -192,16 +262,20 @@ const MenuItemDetails = () => {
                   </div>
                 </div>
 
-                {/* Tags */}
+                {/* Dietary Tags from DB */}
                 <div className="bg-white border border-gray-100 rounded-2xl p-5">
                   <h3 className="font-semibold text-[#1a1a2e] mb-3">Dietary Info</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {["Freshly Prepared", "Chef Recommended", "Gluten-Free Option", "Contains Dairy"].map((tag) => (
-                      <span key={tag} className="px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
+                  {item.dietaryTags && item.dietaryTags.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {item.dietaryTags.map((tag) => (
+                        <span key={tag} className="px-3 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-700 text-xs font-medium">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400">No dietary info available for this item.</p>
+                  )}
                 </div>
 
                 {/* Reservation prompt */}

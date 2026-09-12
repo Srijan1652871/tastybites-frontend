@@ -12,6 +12,10 @@ const AddMenuItem = () => {
     price: "",
     category: "",
     availability: true,
+    calories: "",
+    prepTime: "",
+    servings: "",
+    dietaryTags: "",
   });
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -72,6 +76,14 @@ const AddMenuItem = () => {
       data.append("price", formData.price);
       data.append("category", formData.category);
       data.append("availability", formData.availability);
+      data.append("calories", formData.calories);
+      data.append("prepTime", formData.prepTime);
+      data.append("servings", formData.servings);
+      // Convert comma-separated string to JSON array
+      const tags = formData.dietaryTags
+        ? formData.dietaryTags.split(",").map((t) => t.trim()).filter(Boolean)
+        : [];
+      data.append("dietaryTags", JSON.stringify(tags));
       data.append("image", imageFile);
 
       const response = await axios.post(
@@ -171,6 +183,59 @@ const AddMenuItem = () => {
                   </select>
                   {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
                 </div>
+              </div>
+            </div>
+
+            {/* Quick Info Section */}
+            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-5">
+              <h2 className="text-base font-bold text-[#1a1a2e] border-b border-gray-100 pb-3">Quick Info <span className="text-gray-400 font-normal text-sm">(Optional)</span></h2>
+              
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="form-label">Calories</label>
+                  <input
+                    type="text"
+                    name="calories"
+                    value={formData.calories}
+                    onChange={handleChange}
+                    placeholder="e.g. ~380 kcal"
+                    className="form-input"
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Prep Time</label>
+                  <input
+                    type="text"
+                    name="prepTime"
+                    value={formData.prepTime}
+                    onChange={handleChange}
+                    placeholder="e.g. 25 min"
+                    className="form-input"
+                  />
+                </div>
+                <div>
+                  <label className="form-label">Servings</label>
+                  <input
+                    type="text"
+                    name="servings"
+                    value={formData.servings}
+                    onChange={handleChange}
+                    placeholder="e.g. 1-2"
+                    className="form-input"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="form-label">Dietary Tags <span className="text-gray-400 font-normal">(comma separated)</span></label>
+                <input
+                  type="text"
+                  name="dietaryTags"
+                  value={formData.dietaryTags}
+                  onChange={handleChange}
+                  placeholder="e.g. Vegan, Gluten-Free, Chef Recommended"
+                  className="form-input"
+                />
               </div>
             </div>
           </div>

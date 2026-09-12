@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import {
   CalendarCheck,
   Clock,
@@ -20,9 +22,15 @@ const openingHours = [
 ];
 
 const Reservations = () => {
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
+  const userDetails = Cookies.get("userDetails")
+    ? JSON.parse(Cookies.get("userDetails"))
+    : null;
+
   const [form, setForm] = useState({
-    name: "",
-    email: "",
+    name: userDetails?.username || "",
+    email: userDetails?.email || "",
     phone: "",
     date: "",
     time: "",
@@ -60,10 +68,19 @@ const Reservations = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!token) {
+      toast.error("Please log in to make a reservation.");
+      navigate("/login");
+      return;
+    }
     if (!validate()) return;
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/reservations`, form);
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/reservations`,
+        form,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setLoading(false);
       setSubmitted(true);
       toast.success("Reservation request submitted! We'll confirm shortly.");

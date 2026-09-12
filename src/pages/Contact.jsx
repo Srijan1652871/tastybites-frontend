@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import axios from "axios";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 import {
   MapPin,
   Phone,
@@ -54,7 +56,18 @@ const subjects = [
 ];
 
 const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const navigate = useNavigate();
+  const token = Cookies.get("token");
+  const userDetails = Cookies.get("userDetails")
+    ? JSON.parse(Cookies.get("userDetails"))
+    : null;
+
+  const [form, setForm] = useState({
+    name: userDetails?.username || "",
+    email: userDetails?.email || "",
+    subject: "",
+    message: "",
+  });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -79,10 +92,19 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!token) {
+      toast.error("Please log in to send a message.");
+      navigate("/login");
+      return;
+    }
     if (!validate()) return;
     setLoading(true);
     try {
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/contact`, form);
+      await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/contact`,
+        form,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setLoading(false);
       setSubmitted(true);
       toast.success("Message sent! We'll get back to you soon.");

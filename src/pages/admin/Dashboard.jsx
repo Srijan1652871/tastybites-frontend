@@ -11,6 +11,7 @@ import {
   ChevronRight,
   Clock,
   PlusCircle,
+  Package,
 } from "lucide-react";
 
 const Dashboard = () => {
@@ -65,6 +66,13 @@ const Dashboard = () => {
       icon: <MessageSquareText size={22} />,
       color: "bg-rose-50 text-rose-600 border-rose-100",
       trend: "contact enquiries",
+    },
+    {
+      title: "Total Orders",
+      value: stats?.totalOrders ?? 0,
+      icon: <Package size={22} />,
+      color: "bg-purple-50 text-purple-600 border-purple-100",
+      trend: `${stats?.pendingOrders ?? 0} pending`,
     },
   ];
 
@@ -181,6 +189,17 @@ const Dashboard = () => {
                 <p className="text-xs text-gray-500">View roles & accounts</p>
               </div>
               <ChevronRight size={16} className="text-gray-400 group-hover:text-blue-500" />
+            </Link>
+            
+            <Link to="/admin/orders" className="flex items-center p-3 rounded-xl hover:bg-purple-50 group transition-colors">
+              <div className="w-10 h-10 rounded-lg bg-purple-100 text-purple-600 flex items-center justify-center mr-3 group-hover:bg-purple-200 transition-colors">
+                <Package size={18} />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-[#1a1a2e]">Manage Orders</p>
+                <p className="text-xs text-gray-500">Update delivery statuses</p>
+              </div>
+              <ChevronRight size={16} className="text-gray-400 group-hover:text-purple-500" />
             </Link>
           </div>
         </div>

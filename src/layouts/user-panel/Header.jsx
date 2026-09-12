@@ -51,16 +51,16 @@ const Header = () => {
 
   const activeLinkClass =
     "text-amber-400 font-semibold relative after:absolute after:bottom-[-4px] after:left-0 after:w-full after:h-[2px] after:bg-amber-400 after:rounded-full";
+
   const inactiveLinkClass =
     "text-gray-300 hover:text-white font-medium transition-colors duration-200 relative after:absolute after:bottom-[-4px] after:left-0 after:w-0 hover:after:w-full after:h-[2px] after:bg-amber-400 after:rounded-full after:transition-all after:duration-300";
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
           ? "bg-[#1a1a2e]/95 backdrop-blur-md shadow-lg shadow-black/20"
           : "bg-[#1a1a2e]/80 backdrop-blur-sm"
-      }`}
+        }`}
     >
       <nav className="max-w-7xl mx-auto px-5 sm:px-8 py-4 flex items-center justify-between">
         {/* Logo */}
@@ -102,12 +102,15 @@ const Header = () => {
                     {userDetails?.username?.[0]?.toUpperCase() || "U"}
                   </span>
                 </div>
+
                 <span className="max-w-[80px] truncate">
                   {userDetails?.username || "Account"}
                 </span>
+
                 <ChevronDown
                   size={14}
-                  className={`transition-transform ${userMenuOpen ? "rotate-180" : ""}`}
+                  className={`transition-transform ${userMenuOpen ? "rotate-180" : ""
+                    }`}
                 />
               </button>
 
@@ -119,6 +122,7 @@ const Header = () => {
                       {userDetails?.email}
                     </p>
                   </div>
+
                   {userDetails?.role === "admin" && (
                     <button
                       onClick={() => navigate("/admin/dashboard")}
@@ -128,6 +132,17 @@ const Header = () => {
                       Admin Panel
                     </button>
                   )}
+
+                  {userDetails?.role === "user" && (
+                    <button
+                      onClick={() => navigate("/dashboard")}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-700 flex items-center gap-2"
+                    >
+                      <User size={14} />
+                      My Dashboard
+                    </button>
+                  )}
+
                   <button
                     onClick={handleLogout}
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
@@ -140,12 +155,17 @@ const Header = () => {
             </div>
           ) : (
             <>
-              <NavLink
-                to="/login"
+              <button
+                onClick={() =>
+                  navigate("/login", {
+                    state: { from: location.pathname },
+                  })
+                }
                 className="px-4 py-2 text-sm font-medium text-gray-300 hover:text-white transition-colors"
               >
                 Login
-              </NavLink>
+              </button>
+
               <button
                 onClick={() => navigate("/register")}
                 className="btn-primary !py-2 !px-5 !text-sm"
@@ -176,16 +196,16 @@ const Header = () => {
                 to={link.to}
                 end={link.end}
                 className={({ isActive }) =>
-                  `px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-amber-400/10 text-amber-400"
-                      : "text-gray-300 hover:bg-white/5 hover:text-white"
+                  `px-4 py-3 rounded-lg text-sm font-medium transition-colors ${isActive
+                    ? "bg-amber-400/10 text-amber-400"
+                    : "text-gray-300 hover:bg-white/5 hover:text-white"
                   }`
                 }
               >
                 {link.label}
               </NavLink>
             ))}
+
             <div className="border-t border-white/10 mt-2 pt-3 flex flex-col gap-2">
               {token ? (
                 <button
@@ -197,12 +217,17 @@ const Header = () => {
                 </button>
               ) : (
                 <>
-                  <NavLink
-                    to="/login"
-                    className="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                  <button
+                    onClick={() =>
+                      navigate("/login", {
+                        state: { from: location.pathname },
+                      })
+                    }
+                    className="px-4 py-2 text-sm text-gray-300 hover:text-white hover:bg-white/5 rounded-lg text-left"
                   >
                     Login
-                  </NavLink>
+                  </button>
+
                   <NavLink
                     to="/register"
                     className="px-4 py-2 text-sm font-semibold text-center text-[#1a1a2e] bg-amber-400 hover:bg-amber-300 rounded-lg transition-colors"

@@ -1,10 +1,11 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { toast } from "sonner";
 import { Star, Heart, Eye } from "lucide-react";
 
 const MenuItemCard = ({ item }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = Cookies.get("token");
 
   const handleView = () => {
@@ -12,6 +13,10 @@ const MenuItemCard = ({ item }) => {
       navigate(`/menu/${item._id}`);
     } else {
       toast.error("Please login to view details");
+
+      navigate("/login", {
+        state: { from: location.pathname },
+      });
     }
   };
 
@@ -68,6 +73,7 @@ const MenuItemCard = ({ item }) => {
           <h3 className="font-serif font-semibold text-[#1a1a2e] text-base leading-tight flex-1">
             {item.name}
           </h3>
+
           <span className="text-amber-500 font-bold text-base whitespace-nowrap">
             ₹{item.price}
           </span>
@@ -76,7 +82,11 @@ const MenuItemCard = ({ item }) => {
         {/* Stars placeholder */}
         <div className="flex items-center gap-1">
           {[...Array(5)].map((_, i) => (
-            <Star key={i} size={11} className="text-amber-400 fill-amber-400" />
+            <Star
+              key={i}
+              size={11}
+              className="text-amber-400 fill-amber-400"
+            />
           ))}
           <span className="text-xs text-gray-400 ml-1">5.0</span>
         </div>
@@ -89,6 +99,7 @@ const MenuItemCard = ({ item }) => {
           >
             View Details
           </button>
+
           <button
             className="p-2 rounded-xl border-2 border-gray-100 text-gray-400 hover:border-rose-400 hover:text-rose-400 transition-all duration-200"
             aria-label="Add to wishlist"

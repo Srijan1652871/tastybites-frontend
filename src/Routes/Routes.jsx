@@ -11,6 +11,7 @@ import NotFound from "../pages/NotFound";
 import About from "../pages/About";
 import Reservations from "../pages/Reservations";
 import Contact from "../pages/Contact";
+import UserDashboard from "../pages/UserDashboard";
 
 import AdminProtected from "../components/AdminProtected";
 import AdminWrapper from "../layouts/admin-panel/AdminWrapper";
@@ -21,6 +22,7 @@ import UpdateMenuItem from "../pages/admin/UpdateMenuItem";
 import Users from "../pages/admin/Users";
 import AdminReviews from "../pages/admin/Reviews";
 import AdminReservations from "../pages/admin/Reservations";
+import AdminOrders from "../pages/admin/Orders";
 
 const Routes = createBrowserRouter([
   {
@@ -36,6 +38,7 @@ const Routes = createBrowserRouter([
       { path: "register", element: <Register /> },
       { path: "admin-signup", element: <AdminSignup /> },
       { path: "login", element: <UserLogin /> },
+      { path: "dashboard", element: <UserDashboard /> },
     ],
   },
   {
@@ -53,6 +56,7 @@ const Routes = createBrowserRouter([
           { path: "users", element: <Users /> },
           { path: "reviews", element: <AdminReviews /> },
           { path: "reservations", element: <AdminReservations /> },
+          { path: "orders", element: <AdminOrders /> },
         ],
       },
     ],
