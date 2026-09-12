@@ -4,9 +4,9 @@ import { Outlet } from "react-router-dom";
 
 const UserWrapper = () => {
   return (
-    <div className="min-h-screen flex flex-col bg-violet-50/40">
+    <div className="min-h-screen flex flex-col bg-[#fefce8]">
       <Header />
-      <div className="flex-1">
+      <div className="flex-1 pt-[68px]">
         <Outlet />
       </div>
       <Footer />
